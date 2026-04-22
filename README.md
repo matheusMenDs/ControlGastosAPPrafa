@@ -12,3 +12,4 @@ Entre as funcionalidades, o projeto oferece:
 - Fluxo direto de uso, com interface prática para registrar e acompanhar gastos no dia a dia.
 
  Inclui uma tela principal e uma segunda tela de controle de gastos relacionados a um cartão de crédito específico com categorias voltadas para as pessoas que utilizam aquele cartão para facilitar o acompanhamento detalhado das despesas. Também possui sistema de parcelas, ou seja caso um gasto seja adicionado com parcelas mensais, o app distribuirá as pareclas para os próximos meses também.
+ (Desenvolvido para rodar no WINDOWS)
