@@ -1,0 +1,36 @@
+// electron-builder.yml - Configuração de build
+appId: com.gastosrafinha.desktop
+productName: GastosRafinha
+directories:
+  buildResources: img
+
+files:
+  - main.js
+  - preload.js
+  - index.html
+  - script.js
+  - style.css
+  - img/**/*
+  - node_modules/**/*
+
+linux:
+  target:
+    - AppImage
+    - deb
+  category: Office
+
+win:
+  target:
+    - nsis
+  icon: img/app.ico
+  publisherName: Matheus Mendes
+  artifactName: GastosRafinha-${version}-win-setup.${ext}
+  signingHashAlgorithms:
+    - sha256
+  rfc3161TimeStampServer: "http://timestamp.digicert.com"
+
+mac:
+  target:
+    - dmg
+    - zip
+  category: public.app-category.productivity

@@ -1,0 +1,15 @@
+{
+  "watch": [
+    "main.js",
+    "preload.js",
+    "index.html",
+    "index2.html",
+    "script.js",
+    "style.css",
+    "server.js",
+    "img"
+  ],
+  "ext": "js html css png jpg svg",
+  "exec": "electron .",
+  "delay": "800"
+}

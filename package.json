@@ -1,0 +1,82 @@
+{
+    "name": "gastos-rafinha",
+    "version": "1.0.0",
+    "description": "Aplicação de desktop para controle de gastos mensais",
+    "main": "main.js",
+    "homepage": "./",
+    "scripts": {
+        "start": "electron .",
+        "dev": "nodemon",
+        "build": "electron-builder",
+        "build:win": "electron-builder -w nsis",
+        "build:win:portable": "electron-builder -w portable",
+        "stop": "pkill -f nodemon || true && pkill -f electron || true"
+    },
+    "keywords": [],
+    "author": {
+        "name": "Matheus Mendes",
+        "email": "matheus@example.com"
+    },
+    "license": "ISC",
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^4.18.2",
+        "fs-extra": "^11.1.1"
+    },
+    "devDependencies": {
+        "electron": "^39.2.5",
+        "electron-builder": "^26.0.12",
+        "nodemon": "^3.0.2"
+    },
+    "build": {
+        "appId": "com.gastosrafinha.desktop",
+        "productName": "GastosRafinha",
+        "icon": "img/icon_256_cover.png",
+        "directories": {
+            "buildResources": "img"
+        },
+        "files": [
+            "main.js",
+            "preload.js",
+            "index.html",
+            "index2.html",
+            "script.js",
+            "style.css",
+            "img/**/*",
+            "node_modules/**/*"
+        ],
+        "linux": {
+            "icon": "img/icon.png",
+            "target": [
+                "AppImage",
+                "deb"
+            ],
+            "category": "Office"
+        },
+        "win": {
+            "icon": "img/app.ico",
+            "target": [
+                "nsis"
+            ]
+        },
+        "mac": {
+            "icon": "img/icon.png",
+            "target": [
+                "dmg",
+                "zip"
+            ]
+        }
+    },
+    "config": {
+        "forge": {
+            "makers": [
+                {
+                    "name": "@electron-forge/maker-deb",
+                    "config": {
+                        "icon": "./img/icon.png"
+                    }
+                }
+            ]
+        }
+    }
+}

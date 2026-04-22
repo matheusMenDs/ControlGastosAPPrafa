@@ -1,0 +1,830 @@
+:root {
+    /* Tema terroso com base nas cores fornecidas */
+    --bg: #e7ddd1;       /* bege claro para fundo base */
+    --bg-2: #c3955c;     /* tom médio para elementos de fundo (botões/inputs) */
+    --card: #9e673e;     /* marrom mais escuro para cartões/painéis */
+    --stroke: #3b2a22;   /* marrom bem escuro para bordas/linhas */
+    --text: #000000;     /* texto padrão preto para máximo contraste */
+    --muted: #3b2a22;    /* marrom escuro para textos secundários */
+    --primary: #996633;  /* marrom como cor de destaque */
+    --primary-2: #c3955c;/* variação mais clara para gradientes */
+    --accent: #996633;   /* acento para foco e realces */
+    --danger: #ef4444;
+    --green: #334837;    /* verde do tema para possíveis usos */
+    --shadow: 0 10px 30px rgba(0, 0, 0, .35);
+}
+
+/* ------------------ Seu CSS original (mantido) ------------------ */
+* {
+    box-sizing: border-box
+}
+
+html,
+body {
+    height: 100%
+}
+
+body {
+    margin: 0;
+    font-family: 'Syne Mono', monospace, Arial, sans-serif;
+    font-size: 16px; /* ligeiro aumento da fonte base */
+    color: var(--text);
+    /* Degradê com marrom mais escuro nas bordas, centro mais claro */
+    background:
+        radial-gradient(1400px 800px at 50% 50%, rgba(59, 42, 34, 0) 50%, rgba(59, 42, 34, 0.06) 100%),
+        radial-gradient(1200px 600px at 20% -10%, rgba(153, 102, 51, 0.02), transparent 55%),
+        radial-gradient(900px 500px at 90% 10%, rgba(59, 42, 34, 0.01), transparent 60%),
+    linear-gradient(to bottom, #f6eee4 0%, #efe5da 100%);
+}
+
+/* Força o efeito de degradê nas bordas acima do conteúdo */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9000; /* acima do conteúdo, abaixo dos modais */
+    /* Vignette marrom visível nas bordas */
+    background: radial-gradient(135% 98% at 50% 50%, rgba(199, 152, 133, 0) 38%, rgba(241, 195, 174, 0.15) 100%);
+}
+
+.app {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 28px 20px;
+}
+
+.header {
+    display: flex;
+    align-items: center; /* alinha mariposa, título e botão no mesmo eixo */
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.brand {
+    display: flex;
+    align-items: center; /* deixa no mesmo eixo horizontal */
+    gap: 8px; /* título mais perto da mariposa */
+    margin-right: 24px; /* espaçamento consistente entre título e botão */
+}
+
+
+/* Logo mariposa */
+.maripo {
+    height: 180px; /* bem maior conforme solicitado */
+    width: auto;
+    margin-left: -80px !important; /* força bem à esquerda para alinhar com o card */
+    image-rendering: auto;
+    object-fit: contain;
+    display: block;
+}
+
+/* Ícone do cogumelo ao lado dos títulos */
+.cogu-icon {
+    height: 72px;
+    width: auto;
+    margin-left: 8px;
+    display: inline-block;
+    object-fit: contain;
+}
+
+@media (max-width: 640px) {
+    .cogu-icon { height: 60px; margin-left: 6px; }
+}
+
+/* Mariposa jump */
+.maripo { transition: transform 260ms cubic-bezier(.2,.9,.2,1); transform-origin: 50% 80%; will-change: transform; }
+
+@keyframes maripo-jump {
+    0% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-12px) scale(1.06); }
+    100% { transform: translateY(0) scale(1); }
+}
+
+.maripo:hover { animation: maripo-jump 320ms cubic-bezier(.22, .9, .3, 1); }
+.maripo.play { animation: maripo-jump 320ms cubic-bezier(.22, .9, .3, 1); }
+
+@media (prefers-reduced-motion: reduce) {
+    .maripo,
+    .maripo:hover {
+        transition: none !important;
+        animation: none !important;
+        transform: none !important;
+    }
+}
+
+/* Ajuste responsivo para telas pequenas */
+@media (max-width: 640px) {
+    .maripo { height: 128px; margin-left: -36px !important; }
+    .brand { gap: 6px; margin-right: 16px; }
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 22px;
+    letter-spacing: .2px
+}
+
+/* .brand-center removido: não é mais utilizado */
+
+/* Group right buttons so header has 3 zones: left | center | right */
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    align-items: center
+}
+
+.file-import input {
+    display: none
+}
+
+.btn {
+    border: 1px solid var(--stroke);
+    background: var(--bg-2);
+    color: #000; /* melhora contraste dos botões no novo tema */
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: .18s ease;
+}
+
+.btn:hover {
+    border-color: var(--stroke); /* borda marrom escuro no hover */
+    transform: translateY(-1px)
+}
+
+.btn.primary {
+    background: #334837; /* fundo verde escuro */
+    border-color: #000; /* borda preta */
+    color: #fff !important; /* escrita branca */
+}
+
+/* Make the + Novo button label bold */
+#btnNew {
+    font-family: "Syne Mono", monospace !important; /* aplica a mesma fonte do projeto */
+    font-weight: 700;
+    font-size: 18px; /* fonte um pouco maior */
+    padding: 12px 18px; /* aumenta o tamanho do botão */
+}
+
+/* Arrow inside switch button */
+.btn .arrow {
+    margin-right: 8px;
+    display: inline-block;
+    transform: translateY(-1px);
+}
+
+.btn.danger {
+    background: #334837; /* fundo verde escuro */
+    border-color: #000; /* borda preta */
+    color: #fff; /* escrita branca */
+}
+
+.btn.danger:hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+}
+
+.icon-btn {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 18px
+}
+
+.icon-btn:hover {
+    color: var(--text)
+}
+
+.summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 16px 0 20px;
+}
+
+.summary-card {
+    background: var(--card);
+    border: 1px solid var(--stroke);
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: var(--shadow);
+}
+
+/* -------- COFRE -------- */
+.summary-card-g{
+    background: var(--card);
+    border: 1px solid var(--stroke);
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: var(--shadow);
+    color: #2f4432; /* verde do tema para o valor/lucro */
+    text-align: center;
+    position: relative;
+    overflow: hidden; /* garante que a imagem fique dentro do card arredondado */
+    height: 110px; /* fixa a altura para não esticar o layout */
+}
+
+.summary-card-g .label {
+    font-size: 16px !important;
+    font-weight: 600;
+    text-align: center;
+    color: #000 !important;
+}
+
+.summary-card-g .value {
+    display: block;
+    font-size: 26px;
+    margin-top: 6px;
+    font-weight: 700;
+}
+
+/* Layout para vencimento da fatura (Página 2) */
+.summary-card-g .due-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 100%;
+}
+
+.summary-card-g .due-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.summary-card-g input[type="date"] {
+    width: auto;
+    max-width: 150px;
+    padding: 6px 8px;
+    font-size: 13px;
+    height: 30px;
+}
+
+/* Compact button inside due row */
+.summary-card-g .due-row .btn {
+    padding: 6px 10px;
+    font-size: 12px;
+    height: 30px;
+}
+
+/* -------- GASTO TOTAL -------- */
+.summary-card-r {
+    background: var(--card);
+    border: 1px solid var(--stroke);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: var(--shadow);
+    color: #996633; /* marrom do tema para gasto total */
+    text-align: center;
+}
+
+.summary-card-r .label {
+    font-size: 16px !important;
+    font-weight: 600;
+    text-align: center;
+    color: #000 !important;
+}
+
+.summary-card-r .value {
+    display: block;
+    font-size: 26px;
+    margin-top: 6px;
+    font-weight: 700;
+    color: #e6bb82; /* ligeiramente mais claro para melhor destaque */
+    /* sem contorno */
+}
+
+/* -------- ITENS -------- */
+.summary-card .label,
+.summary-card .value {
+    text-align: center;
+}
+
+/* mantém o tamanho original */
+.summary-card .label { font-size: 12px; }
+.summary-card .value { font-size: 22px; }
+
+.filters {
+    background: var(--card);
+    border: 1px solid var(--stroke);
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: var(--shadow);
+}
+
+.filter-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px
+}
+
+.field.grow {
+    flex: 1
+}
+
+label {
+    color: #000;
+    font-size: 13px
+}
+
+/* Negrito nos títulos de Categoria, Ordenar por data e Buscar; Mês normal */
+.filters .filter-row .field:first-child label { font-weight: 400; }
+.filters .filter-row .field:nth-child(2) label,
+.filters .filter-row .field:nth-child(3) label,
+.filters .filter-row .field:nth-child(4) label { font-weight: 700; }
+
+input,
+select,
+textarea {
+    background: var(--bg-2);
+    border: 1px solid var(--stroke);
+    color: #000; /* texto dos campos em preto */
+    border-radius: 10px;
+    padding: 10px 12px;
+    outline: none;
+    transition: .16s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--accent)
+}
+
+/* Remove seta do select quando queremos mostrar sem opções (ex.: Página 1, Cartão = Eu) */
+select.no-arrow {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: none !important;
+    padding-right: 12px; /* compensa a remoção da seta */
+}
+
+/* Placeholder mais escuro para legibilidade */
+input::placeholder,
+textarea::placeholder {
+    color: #3b2a22;
+    opacity: 0.8;
+}
+
+.content {
+    display: grid;
+    grid-template-columns: 1.6fr .9fr;
+    gap: 16px;
+    margin: 18px 0;
+}
+
+.left,
+.right {
+    background: var(--card);
+    border: 1px solid var(--stroke);
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: var(--shadow);
+}
+
+/* Align chart content within the right panel and prevent overflow */
+.right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    background: var(--card); /* marrom padronizado do projeto */
+    color: #000; /* textos em preto para destaque */
+}
+
+#chartBar {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block;
+    margin: 0 auto;
+    max-height: 200px !important;
+    height: 200px !important;
+}
+
+.right .legend,
+.right .hint {
+    align-self: stretch;
+}
+
+/* Texto dentro do painel direito em preto para contraste no marrom */
+.right .legend { color: #000; }
+.right .hint { color: #000; border-top-color: rgba(0,0,0,0.25); }
+.right .hint li { color: #000; }
+.right .hint li::before { color: #000; }
+
+.table-wrap {
+    overflow: auto;
+    border-radius: 10px
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+.table th,
+.table td {
+    border-bottom: 1px solid var(--stroke);
+    padding: 12px;
+    font-size: 15px;
+    color: #000; /* conteúdo da tabela em preto */
+    vertical-align: middle; /* centraliza conteúdo verticalmente nas linhas */
+}
+
+.table thead th {
+    position: sticky;
+    top: 0;
+    background: var(--card);
+    z-index: 1;
+    color: #000;
+    font-weight: 600;
+}
+
+.table td.right {
+    text-align: center;       /* centraliza horizontalmente o conteúdo */
+    display: block;           /* permite largura total do conteúdo */
+    padding: 0;               /* remove espaços internos da célula */
+    background: #334837;      /* pinta toda a célula de verde */
+    color: #fff;              /* texto branco sobre verde */
+    border-radius: 14px;      /* cantos arredondados uniformes */
+    overflow: hidden;         /* garante que o verde chegue até as bordas */
+}
+
+.table td.center,
+.table th.center {
+    text-align: center
+}
+
+.row-actions {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    justify-content: center;
+    align-items: center;
+    gap: 8px
+}
+
+.row-actions .btn {
+    padding: 6px 10px;
+    font-size: 12px
+}
+
+/* Botão menor e mais escuro para excluir grupo */
+.btn.group-delete {
+    padding: 4px 8px;
+    font-size: 11px;
+    background: #283a2c; /* mais escuro que #334837 */
+    color: #fff;
+    border-color: #000;
+}
+
+/* Espaço reservado para manter alinhamento quando não há botão */
+.btn.placeholder {
+    visibility: hidden;
+}
+
+.badge {
+    padding: 0;              /* sem preenchimento, apenas texto */
+    border-radius: 0;        /* remove formato de pílula */
+    border: none;            /* sem borda */
+    background: transparent; /* sem fundo */
+    color: #283a2c;          /* texto verde escuro */
+
+    font-weight: bold;        /* mantém destaque no texto */
+}
+
+.badge.c1,
+.badge.c2,
+.badge.c3,
+.badge.c4,
+.badge.c5,
+.badge.c6,
+.badge.c7,
+.badge.c8 { background: transparent !important; color: #334837 !important; border: none !important; }
+
+/* Valor na tabela como "etiqueta" verde escuro */
+.value-pill {
+    display: block;            /* ocupa a largura inteira do td */
+    width: 100%;
+    background: transparent;   /* o verde está na célula */
+    color: #fff !important;
+    border: none;
+    border-radius: 0;          /* sem raio; quem arredonda é a célula */
+    padding: 16px 0;           /* altura confortável sem criar espaços marrons */
+    font-weight: bold;
+    font-size: 13px;           /* legibilidade */
+    line-height: 1.4;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* Cabeçalho da coluna Valor com fundo verde escuro */
+.table thead th.right {
+    background: #334837 !important;
+    color: #fff !important;
+}
+
+.legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 20px;
+    color: #3b2a22; /* padrão fora do painel direito */
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.color {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    display: inline-block;
+    border: 1px solid #000; /* contorno preto nos quadradinhos */
+}
+
+.color.alimentacao { background: #b98552; }
+.color.lazer { background: #be5b1dff; }
+.color.cartao { background: #3b5844; }
+.color.gasolina { background: #a07c3aff; }
+.color.gasolina { background: #c58921; }
+.color.pessoal { background: #7a5333; }
+.color.cofre { background: #4a362b; }
+/* Novo: Outros */
+.color.outros { background: #8a6b4a; }
+/* Donos (Página 2) específicos */
+.color.mae { background: #6f8c54; }
+
+
+.hint {
+    margin-top: 25px;
+    color: #3b2a22; /* padrão fora do painel direito */
+        font-size: 13px;
+    border-top: 1px solid rgba(59, 42, 34, 0.25);
+    line-height: 1.6;
+}
+
+.hint ul {
+    margin: 0;
+    padding-left: 20px;
+    list-style: none;
+}
+
+.hint li {
+    margin: 6px 0;
+    position: relative;
+    padding-left: 8px;
+    color: #3b2a22;
+    left: -8px;
+    top: -15px;
+}
+
+.hint li::before {
+    content: '▸';
+    position: absolute;
+    left: -8px;
+    color: var(--primary);
+    font-size: 10px;
+}
+
+/* Overrides dentro do painel do gráfico (direita) para texto preto */
+.right .legend { color: #000; }
+.right .hint { color: #000; border-top-color: rgba(0,0,0,0.25); }
+.right .hint li { color: #000; }
+.right .hint li::before { color: #000; }
+
+/* Borda padronizada marrom escuro para o seletor de categoria */
+#filterCategory { border-color: var(--stroke) !important; }
+
+/* Nota: a borda do menu dropdown nativo do select não é estilizada via CSS; se desejar, posso criar um select custom com borda preta no menu. */
+
+.footer {
+    color: #000; /* rodapé em preto */
+    display: flex;
+    justify-content: center;
+    padding: 12px 0;
+    font-size: 16px
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: rgba(0, 0, 0, .55);
+    backdrop-filter: blur(3px);
+}
+
+.modal.hidden {
+    display: none
+}
+
+.modal-dialog {
+    width: 100%;
+    max-width: 680px;
+    background: var(--card);
+    border: 1px solid var(--stroke);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 16px 18px; /* mais espaço na base para não cortar o texto */
+    border-bottom: 1px solid var(--stroke)
+}
+
+/* Evitar que o título do modal seja cortado na base */
+.modal-header h2 {
+    margin: 0;
+    line-height: 1.25;
+}
+
+.modal-body {
+    padding: 16px
+}
+
+.form-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    margin-bottom: 12px
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end
+}
+
+/* Responsive */
+@media (max-width: 980px) {
+    .content {
+        grid-template-columns: 1fr
+    }
+}
+
+@media (max-width: 640px) {
+    .summary {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-row {
+        flex-direction: column
+    }
+
+    .table {
+        min-width: unset
+    }
+}
+
+/* Fix: garantir que o modal fica sempre acima do conteúdo */
+.modal {
+    z-index: 9999 !important;
+}
+
+.modal-dialog {
+    z-index: 10000 !important;
+    position: relative;
+}
+
+#chartBar {
+    width: 100%;
+    height: 220px; /* tamanho ideal */
+}
+
+.bungee-spice-regular {
+  font-family: "Bungee Spice", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.bungee-spice-regular {
+    font-family: "Bungee Spice", sans-serif !important;
+    font-size: 30px !important; /* 🔥 AQUI aumenta o tamanho */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Título com fonte Ephesis */
+.ephesis-regular {
+    font-family: "Ephesis", cursive !important;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 72px !important; /* título um pouco maior */
+    line-height: 1;  /* aproxima melhor do eixo da imagem */
+    color: #000 !important; /* título preto conforme solicitado */
+}
+
+@media (max-width: 640px) {
+    .ephesis-regular { font-size: 64px !important; }
+}
+
+/* Título com fonte Syne Mono */
+.syne-mono-regular {
+    font-family: "Syne Mono", monospace !important;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 72px !important;
+    line-height: 1.05;
+    color: #000 !important;
+}
+
+@media (max-width: 640px) {
+    .syne-mono-regular { font-size: 64px !important; }
+}
+
+/* ------------------ Ícone do calendário marrom escuro (WebKit) ------------------ */
+input[type="month"]::-webkit-calendar-picker-indicator,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    /* filtro ajustado para um marrom bem escuro */
+    filter: invert(12%) sepia(18%) saturate(1300%) hue-rotate(345deg) brightness(85%) contrast(105%);
+    cursor: pointer;
+}
+
+/* Accent dos date pickers segue o tema marrom */
+input[type="date"], input[type="month"] {
+        accent-color: var(--stroke);
+}
+
+/* ------------------ Confirm modal custom ------------------ */
+#confirmModal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(2,6,12,0.55); z-index: 12000; backdrop-filter: blur(3px); }
+#confirmModal .confirm-card { width: 92%; max-width: 420px; background: var(--card); border: 1px solid var(--stroke); border-radius: 12px; padding: 18px; box-shadow: var(--shadow); color: var(--text); }
+#confirmModal .confirm-msg { margin-bottom: 16px; color: var(--muted); }
+#confirmModal .confirm-actions { display:flex; justify-content:flex-end; gap:8px; }
+#confirmModal .confirm-actions .btn { padding:8px 12px; border-radius:8px; }
+/* Cancel agora usa a mesma cor que era do Confirmar (degradê marrom) */
+#confirmModal .confirm-actions .btn.cancel { background: linear-gradient(135deg,var(--primary),var(--primary-2)); color:#000; border:none; }
+/* Confirmar agora é verde com letra branca */
+#confirmModal .confirm-actions .btn.ok { background:#334837; color:#fff; border:1px solid #000; }
+
+@media (max-width: 420px) {
+  #confirmModal .confirm-card { padding: 12px; }
+  #confirmModal .confirm-actions { gap:6px; }
+}
+
+/* ----- Ajustes específicos do card ITENS ----- */
+.summary-card {
+    text-align: center !important;
+}
+
+.summary-card .label {
+    font-size: 16px !important; /* aumenta só para ficar igual aos outros dois */
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+    color: #000 !important;
+}
+
+.summary-card .value {
+    font-size: 24px !important;
+    margin-top: 4px;
+    display: inline-block;
+    color: #fff !important;
+    background: #334837;
+    border: 1px solid #000;
+    border-radius: 10px;
+    padding: 6px 12px;
+        font-size: 13px;
+}
+
+/* ----- Overrides finais: garantir degradê no fundo e evitar branco sólido ----- */
+html, body { min-height: 100%; }
+
+body {
+    /* degradê claro de cima para baixo, com fallback de cor de fundo */
+    background: linear-gradient(to bottom, #e4c49e 0%, var(--bg) 100%) !important;
+    background-color: var(--bg) !important;
+}
+
+/* suaviza o vinheta sem esconder o degradê */
+body::before {
+    /* remove o vinheta para evitar qualquer recomeço visual do degradê */
+    background: none !important;
+}

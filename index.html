@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gastos Rafa</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee+Spice&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne+Mono&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="img/coin.png">
+</head>
+
+<body>
+    <!-- Login removido: carregar direto a tela principal -->
+
+    <div class="app">
+        <header class="header">
+            <div class="brand">
+                <img src="/img/mariposa.png" alt="Mariposa" class="maripo" />
+                <h1 class="syne-mono-regular">Gastos Rafa</h1>
+                <img src="img/cogu-removebg-preview.png" alt="Cogu" class="cogu-icon" />
+            </div>
+
+            <div class="controls">
+                <div class="actions">
+                    <button id="btnNew" class="btn primary" title="Novo gasto (N)">+ Novo</button>
+                    <button id="btnSwitch" class="btn" title="Ir para Cartão"><span class="arrow">→</span><span class="label">Cartão</span></button>
+                    <button id="btnFullscreen" class="btn" title="Tela cheia (F11)">⤢</button>
+                </div>
+            </div>
+        </header>
+
+        <section class="summary">
+            <!-- Gasto Total à esquerda -->
+            <div class="summary-card-r">
+                <span class="label">Gasto Total</span>
+                <span id="totalMonth" class="value">R$ 0,00</span>
+            </div>
+
+            <div class="summary-card">
+                <span class="label">Itens</span>
+                <span id="itemsCount" class="value">0</span>
+            </div>
+
+            <!-- Cofre (direita) -->
+            <div class="summary-card-g">
+                <span class="label">Cofre (lucro)</span>
+                <span id="profit" class="value">R$ 0,00</span>
+            </div>
+        </section>
+
+        <section class="filters">
+            <div class="filter-row">
+                <div class="field">
+                    <label>Mês</label>
+                    <input type="month" id="filterMonth" />
+                </div>
+                <div class="field">
+                    <label>Categoria</label>
+                    <select id="filterCategory">
+                        <option value="">Todas</option>
+                        <option>Alimentação</option>
+                        <option>Lazer</option>
+                        <option>Cartão</option>
+                        <option>Gasolina</option>
+                        <option>Pessoal</option>
+                        <option>Outros</option>
+                        <option>Cofre</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Ordenar por data</label>
+                    <button id="toggleSort" class="btn">Mais nova → Mais antiga</button>
+                </div>
+                <div class="field grow">
+                    <label>Buscar</label>
+                    <input type="search" id="searchInput" placeholder="Descrição ou nome..." />
+                </div>
+            </div>
+            
+        </section>
+
+        <section class="content">
+            <div class="left">
+                <div class="table-wrap">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Descrição</th>
+                                <th>Categoria</th>
+                                <th class="right">Valor</th>
+                                <th class="center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Linhas geradas via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="right">
+                <canvas id="chartBar" height="220"></canvas>
+                <div class="legend">
+                    <!-- Ordem para duas colunas (auto-flow por linhas):
+                         Esquerda: Alimentação, Lazer, Cartão, Gasolina
+                         Direita:  Pessoal, Outros, Cofre -->
+                    <div class="legend-item"><span class="color alimentacao"></span>Alimentação</div>
+                    <div class="legend-item"><span class="color pessoal"></span>Pessoal</div>
+                    <div class="legend-item"><span class="color lazer"></span>Lazer</div>
+                    <div class="legend-item"><span class="color outros"></span>Outros</div>
+                    <div class="legend-item"><span class="color cartao"></span>Cartão</div>
+                    <div class="legend-item"><span class="color cofre"></span>Cofre</div>
+                    <div class="legend-item"><span class="color gasolina"></span>Gasolina</div>
+                </div>
+                <div class="hint">
+                    <ul>
+                        <br><br>
+                        <li>n -> NOVO</li>
+                        <li>/ -> BUSCAR</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <span> &copy; 2025 Rafaella Gentil Almeida</span>
+        </footer>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal hidden">
+        <div class="modal-dialog">
+            <header class="modal-header">
+                <h2 id="modalTitle">Novo gasto</h2>
+                <button id="modalClose" class="icon-btn" title="Fechar">✕</button>
+            </header>
+            <div class="modal-body">
+                <form id="expenseForm">
+                    <div class="form-row">
+                        <div class="field">
+                            <label>Data</label>
+                            <input type="date" id="dateInput" required />
+                        </div>
+                        <div class="field grow">
+                            <label>Descrição</label>
+                            <input type="text" id="descInput" placeholder="Ex: Gasolina" required />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="field">
+                            <label>Categoria</label>
+                            <select id="catInput" required>
+                                <option>Alimentação</option>
+                                <option>Lazer</option>
+                                <option>Cartão</option>
+                                <option>Gasolina</option>
+                                <option>Pessoal</option>
+                                <option>Outros</option>
+                                <option>Cofre</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label>Valor (R$)</label>
+                            <input type="number" id="valueInput" step="0.01" min="0" placeholder="0,00" required />
+                        </div>
+                    </div>
+
+                    <!-- Campos específicos para Cartão -->
+                    <div class="form-row" id="cardExtrasRow" style="display:none;">
+                        <div class="field">
+                            <label>Pessoa (Cartão)</label>
+                            <select id="ownerInput">
+                                <option>Eu</option>
+                                <option>Rafa</option>
+                                <option>Mãe</option>
+                                <option>Manu</option>
+                                <option>Matheus</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label>Parcelas</label>
+                            <input type="number" id="installmentsInput" min="1" value="1" />
+                        </div>
+                        <div class="field">
+                            <label>Tipo de valor</label>
+                            <select id="installmentValueType">
+                                <option value="parcela">Valor da parcela</option>
+                                <option value="total" selected>Total da compra</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label>Nota (opcional)</label>
+                        <textarea id="noteInput" rows="2" placeholder="Detalhes, forma de pagamento..."></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" id="btnSave" class="btn primary">Salvar</button>
+                        <button type="button" id="btnCancel" class="btn">Cancelar</button>
+                    </div>
+                    <input type="hidden" id="editingId" />
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm modal custom (para limpar e exclusões) -->
+    <div id="confirmModal" aria-hidden="true">
+        <div class="confirm-card" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+            <div id="confirmTitle" style="font-weight:700; margin-bottom:8px;">Confirmação</div>
+            <div class="confirm-msg" id="confirmMsg">Mensagem</div>
+            <div class="confirm-actions">
+                <button class="btn cancel" id="confirmCancel">Cancelar</button>
+                <button class="btn ok" id="confirmOk">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
