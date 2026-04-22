@@ -1,3 +1,5 @@
+Projeto: APP Desenvolvido para uma pessoa específica.
+
 Esse projeto de Controle de Gastos mensais é um APP de desktop e foi desenvolvido para a rafa, desenvolvido com Electron e Node.js. 
 Ele permite cadastrar, editar, filtrar e visualizar despesas por categoria e mês, com persistência local em arquivo JSON e interface simples para acompanhamento detalhado de despesas no dia a dia.
 
